@@ -1,5 +1,5 @@
 from Domain.User.user import User
-from Domain.User.repository import Repository
+from Infrastructure.User.repository import Repository
 
 class RegisterUser(object):
 
@@ -10,6 +10,6 @@ class RegisterUser(object):
     def execute(self, nickname):
         if nickname not in self.repository.userDic:
             user = User(nickname)
-            self.repository.userDic[nickname] = user
+            self.repository.save(user)
         else:
             raise Exception('this user already exist')

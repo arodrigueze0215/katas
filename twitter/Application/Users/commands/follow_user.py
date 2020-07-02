@@ -1,5 +1,5 @@
 from Domain.User.user import User
-from Domain.User.repository import Repository
+from Infrastructure.User.repository import Repository
 
 class FollowUser(object):
     """docstring for followTo."""
@@ -8,6 +8,13 @@ class FollowUser(object):
         self.repository = Repository
 
     def execute(self, User, userToFollow):
-        userToFollow = self.repository.getUserById(userToFollow)
         user = self.repository.getUserById(User)
-        self.repository.setFollowing(user, userToFollow)
+        try:
+            uToFollow = self.repository.getUserById(userToFollow)
+        except Exception:
+            raise Exception(f'The user {nickname} does not exist')
+
+        if user.nickname == uToFollow.nickname:
+            raise Exception('you can not follow yourself')
+        else:
+            self.repository.setFollowing(user, uToFollow)

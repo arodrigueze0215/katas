@@ -1,4 +1,4 @@
-from Domain.User.repository import Repository
+from Infrastructure.User.repository import Repository
 class IsFollowing(object):
     """docstring for isFollowing."""
 
