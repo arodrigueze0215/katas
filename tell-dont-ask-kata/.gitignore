@@ -1,0 +1,10 @@
+.idea
+*.iml
+target
+.classpath
+.settings
+.project
+.vscode
+node_modules
+__pycache__
+tellDontAsk/
