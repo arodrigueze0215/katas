@@ -1,6 +1,11 @@
 import decimal
 
 from src.domain.OrderStatus import OrderStatus
+from src.domain.exceptions.OrderCannotBeShippedError import OrderCannotBeShippedError
+from src.domain.exceptions.OrderCannotBeShippedTwiceError import OrderCannotBeShippedTwiceError
+from src.domain.exceptions.ShippedOrdersCannotBeChangedError import ShippedOrdersCannotBeChangedError
+from src.domain.exceptions.RejectedOrderCannotBeApprovedError import RejectedOrderCannotBeApprovedError
+from src.domain.exceptions.ApprovedOrderCannotBeRejectedError import ApprovedOrderCannotBeRejectedError
 
 
 class Order(object):
@@ -39,3 +44,24 @@ class Order(object):
 
     def set_id(self, id: int):
         self.id = id
+
+    def shipment(self):
+        if self.get_status() is OrderStatus.CREATED or self.get_status() is OrderStatus.REJECTED:
+            raise OrderCannotBeShippedError()
+
+        if self.get_status() is OrderStatus.SHIPPED:
+            raise OrderCannotBeShippedTwiceError()
+
+        self.set_status(OrderStatus.SHIPPED)
+
+    def approval(self, isApproved):
+        if self.get_status() is OrderStatus.SHIPPED:
+            raise ShippedOrdersCannotBeChangedError()
+
+        if self.get_status() is OrderStatus.REJECTED:
+            raise RejectedOrderCannotBeApprovedError()
+
+        if self.get_status() is OrderStatus.APPROVED:
+            raise ApprovedOrderCannotBeRejectedError()
+
+        self.set_status(isApproved)

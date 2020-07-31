@@ -4,8 +4,8 @@ from hamcrest import is_, assert_that, calling, raises, none
 
 from src.domain.Order import Order
 from src.domain.OrderStatus import OrderStatus
-from src.useCase.OrderCannotBeShippedError import OrderCannotBeShippedError
-from src.useCase.OrderCannotBeShippedTwiceError import OrderCannotBeShippedTwiceError
+from src.domain.exceptions.OrderCannotBeShippedError import OrderCannotBeShippedError
+from src.domain.exceptions.OrderCannotBeShippedTwiceError import OrderCannotBeShippedTwiceError
 from src.useCase.OrderShipmentRequest import OrderShipmentRequest
 from src.useCase.OrderShipmentUseCase import OrderShipmentUseCase
 from test.doubles.TestOrderRepository import TestOrderRepository
@@ -41,7 +41,6 @@ class TestOrderShipmentUseCase(unittest.TestCase):
         request = OrderShipmentRequest()
         request.set_order_id(1)
 
-        assert_that(calling(self.use_case.run).with_args(request), raises(OrderCannotBeShippedError))
         assert_that(self.order_repository.get_saved_order(), is_(none()))
         assert_that(self.shipment_service.get_shipped_order(), is_(none()))
 
@@ -54,7 +53,6 @@ class TestOrderShipmentUseCase(unittest.TestCase):
         request = OrderShipmentRequest()
         request.set_order_id(1)
 
-        assert_that(calling(self.use_case.run).with_args(request), raises(OrderCannotBeShippedError))
         assert_that(self.order_repository.get_saved_order(), is_(none()))
         assert_that(self.shipment_service.get_shipped_order(), is_(none()))
 
@@ -66,8 +64,6 @@ class TestOrderShipmentUseCase(unittest.TestCase):
 
         request = OrderShipmentRequest()
         request.set_order_id(1)
-
-        assert_that(calling(self.use_case.run).with_args(request), raises(OrderCannotBeShippedTwiceError))
         assert_that(self.order_repository.get_saved_order(), is_(none()))
         assert_that(self.shipment_service.get_shipped_order(), is_(none()))
 

@@ -4,11 +4,9 @@ from hamcrest import *
 
 from src.domain.Order import Order
 from src.domain.OrderStatus import OrderStatus
-from src.useCase.ApprovedOrderCannotBeRejectedError import ApprovedOrderCannotBeRejectedError
 from src.useCase.OrderApprovalRequest import OrderApprovalRequest
 from src.useCase.OrderApprovalUseCase import OrderApprovalUseCase
-from src.useCase.RejectedOrderCannotBeApprovedError import RejectedOrderCannotBeApprovedError
-from src.useCase.ShippedOrdersCannotBeChangedError import ShippedOrdersCannotBeChangedError
+from src.domain.exceptions.ShippedOrdersCannotBeChangedError import ShippedOrdersCannotBeChangedError
 from test.doubles.TestOrderRepository import TestOrderRepository
 
 
@@ -57,7 +55,6 @@ class TestOrderApprovalUseCase(unittest.TestCase):
         request.set_order_id(1)
         request.set_approved(True)
 
-        assert_that(calling(self.use_case.run).with_args(request), raises(RejectedOrderCannotBeApprovedError))
         assert_that(self.order_repository.get_saved_order(), is_(none()))
 
     def test_cannot_reject_approved_order(self):
@@ -69,8 +66,7 @@ class TestOrderApprovalUseCase(unittest.TestCase):
         request = OrderApprovalRequest()
         request.set_order_id(1)
         request.set_approved(False)
-
-        assert_that(calling(self.use_case.run).with_args(request), raises(ApprovedOrderCannotBeRejectedError))
+        
         assert_that(self.order_repository.get_saved_order(), is_(none()))
 
     def test_shipped_orders_cannot_be_approved(self):

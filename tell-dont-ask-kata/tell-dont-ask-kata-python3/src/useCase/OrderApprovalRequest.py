@@ -1,3 +1,4 @@
+from src.domain.OrderStatus import OrderStatus
 class OrderApprovalRequest:
     def set_order_id(self, order_id: int):
         self.order_id = order_id
@@ -9,4 +10,4 @@ class OrderApprovalRequest:
         self.approved = approved
 
     def is_approved(self):
-        return self.approved
+        return OrderStatus.APPROVED if self.approved else OrderStatus.REJECTED
